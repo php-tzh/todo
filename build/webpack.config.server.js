@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const merge = require('webpack-merge')
+let { merge }= require('webpack-merge')
 const baseConfig = require('./webpack.config.base')
 let MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueServerPlugin = require('vue-server-renderer/server-plugin')

@@ -1,36 +1,37 @@
 const Router = require('koa-router')
 const axios = require('axios')
-const MemoryFs = require('memory-fs')
-const webpack = require('webpack')
 const path = require('path')
 const fs = require('fs')
-const ejs = require('ejs')
-const VueServerRenderer = require('vue-server-renderer')
+const MemoryFS = require('memory-fs')
+const webpack = require('webpack')
+const VueServerRenderer = require('vue-server-renderer')//服务端渲染
 
-const serverConfig = require('../../build/webpack.config.server')
-//生成bundle文件 用于服务端渲染
-const serverCompiler = webpack(serverConfig)
-const mfs = new MemoryFs()
-//编译文件输出在内存
-serverCompiler.outputFileSystem = mfs
-//记录webpack每次打包生成文件
-let bundle
-serverCompiler.watch({},(err,stats)=>{
-    if(err) throw err
-    stats = stats.toJson()
-    stats.errors.forEach(err=>console.log(err))
-    stats.warning.forEach(warn=>console.log(warn))
+const serverRender = require('../routers/server-render')
+const serverConfig = require('../../build/webpack.config.server')//引入配置文件
 
-    const bundlePath  = path.join(
-        serverConfig.output.path,
-        'vue-ssr-server-bundle.json'
-    )
-    //读取内存中的bundle
-    bundle = JSON.parse(mfs.readFileSync(bundlePath,'utf-8'))
-    
-   
+const serverCompiler = webpack(serverConfig)//编译webpack
+const mfs = new MemoryFS()//将文件写到内存对象
+serverCompiler.outputFileSystem = mfs//将文件输出到内存对象
 
+let bundle //记录webpack每次打包生成的文件
+serverCompiler.watch({}, (err, stats) => {
+  //在client目录修改时重新打包
+  if (err) throw err
+  //其他错误解决
+  stats = stats.toJson()
+  stats.errors.forEach(err => console.log(err))
+  stats.warnings.forEach(warn => console.warn(warn))
+
+  //读取bundle文件
+  const bundlePath = path.join(
+    serverConfig.output.path,
+    //vue-server-renderer/server-plugin生成的json文件
+    'vue-ssr-server-bundle.json'
+  )
+  bundle = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))//二进制转换字符串读取
+  console.log('new bundle generated')
 })
+
 //处理服务端渲染
 const handleSSR = async (ctx)=>{
     //当服务启动时，bundle还没有打包好
@@ -40,12 +41,12 @@ const handleSSR = async (ctx)=>{
     }
     //获取客户端资源文件
     const clientManifestResp = await axios.get(
-        'http://127.0.0.1:3000/vue-ssr-client-manifest.json'
+        'http://127.0.0.1:3000/public/vue-ssr-client-manifest.json'
     )
     const clientManifest = clientManifestResp.data
    //获取模板文件
     const template = fs.readFileSync(
-        path.join(__dirname,'../server.template.ejs')
+        path.join(__dirname,'../server.template.ejs'),'utf-8'
     )
     //生成bundlerenderer对象-
     const renderer = VueServerRenderer
@@ -54,6 +55,9 @@ const handleSSR = async (ctx)=>{
         clientManifest
 
     })
+
+    //html渲染
+    await serverRender(ctx,renderer,template)
 
 }
 const router = new Router()

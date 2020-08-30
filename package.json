@@ -8,7 +8,8 @@
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.config.client.js",
     "build": "npm run clean && npm run build:client",
     "clean": "rimraf dist",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js"
+    "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
+    "dev:server": "cross-env NODE_ENV=development node server/server.js"
   },
   "keywords": [],
   "author": "",
@@ -54,6 +55,7 @@
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "vue": "^2.6.12",
+    "vue-meta": "^2.4.0",
     "vue-router": "^3.4.3",
     "vue-server-renderer": "^2.6.12",
     "vuex": "^3.5.1"

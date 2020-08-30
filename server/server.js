@@ -1,4 +1,4 @@
-const Koa = requrie('koa')
+const Koa = require('koa')
 
 const app = new Koa()
 const pageRouter = require('./routers/dev-ssr')
@@ -26,7 +26,7 @@ app.use(async (ctx,next)=>{
 app.use(pageRouter.routes()).use(pageRouter.allowedMethods())
 
 const HOST = process.env.HOST || '0.0.0.0'
-const PORT = process.env.PORT || '8000'
+const PORT = process.env.PORT || '8081'
 app.listen(PORT,HOST,()=>{
     console.log(`server is run in ${HOST}:${PORT}`)
 })
