@@ -3,7 +3,8 @@
     <div id="cover"></div>
  
     <Header></Header>
-    <Todo></Todo>
+    <router-view></router-view>
+    <!-- <Todo></Todo> -->
     <Footer></Footer>
   </div>
 </template>
@@ -12,13 +13,13 @@
 
 import Header from './layout/header.vue'
 import Footer from './layout/footer.jsx'
-import Todo from './views/todo/todo.vue'
+// import Todo from './views/todo/todo.vue'
 
 export default {
   components:{
     Header,
     Footer,
-    Todo
+    // Todo
   }
 
 }
