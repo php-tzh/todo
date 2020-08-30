@@ -21,11 +21,11 @@ const defaultPlugins = [
 ]
  if(isDev){
      config = merge(baseConfig,{
-        devtool:'#cheap-module-eval-source-map',
+        devtool:'cheap-module-eval-source-map',
          module:{
              rules:[
                 {
-                    test:/\.(styl|stylus)$/,
+                    test:/\.styl/,
                     use:[
                         'style-loader',
                         'css-loader',
@@ -76,7 +76,8 @@ const defaultPlugins = [
         plugins:[
             new MiniCssExtractPlugin({
                 filename:'main.css'//生成的样式文件名称
-            })
+            }),
+            new HTMLPlugin()
         ],
         optimization:{
             splitChunks:{
