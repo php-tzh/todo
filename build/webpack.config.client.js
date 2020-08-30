@@ -13,6 +13,9 @@ let baseConfig = require('./webpack.config.base')
     overlay:{
         errors:true
     },
+    historyApiFallback:{
+        index:'/public/index.html'
+    },
     hot:true
 }
 const defaultPlugins = [
