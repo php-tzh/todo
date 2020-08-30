@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.config.client.js",
-    "build": "npm run clean && npm run build:client",
-    "clean": "rimraf dist",
+    "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.config.server.js",
+    "build": "npm run clean && npm run build:client && npm run build:server",
+    "clean": "rimraf public rimraf server-build",
+    "start":"cross-env NODE_ENV=production node server/server.js",
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.config.client.js",
     "dev:server": "cross-env NODE_ENV=development node server/server.js"
   },

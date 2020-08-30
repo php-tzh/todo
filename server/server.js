@@ -2,7 +2,7 @@ const Koa = require('koa')
 const path = require('path')
 
 const app = new Koa()
-const pageRouter = require('./routers/dev-ssr')
+
 const staticRouter = require('./routers/static')
 const Router = require('koa-router');
 const send = require('koa-send');
@@ -38,7 +38,13 @@ staticRouter(router,{
     html:365
 });
 app.use(router.routes())
+let pageRouter
+if(isDev){
+   pageRouter = require('./routers/dev-ssr')
 
+}else{
+   pageRouter = require('./routers/ssr')
+}
 app.use(pageRouter.routes()).use(pageRouter.allowedMethods())
 
 const HOST = process.env.HOST || '0.0.0.0'

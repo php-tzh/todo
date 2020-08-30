@@ -16,7 +16,7 @@ module.exports = function(router,options){
     options.styles = options.styles||30;
     options.html = options.html||30;
     options.other = options.othre||7;
-    router.all(/((\.jpg)|(\.png)|(\.gif))$/i,static('./',{
+    router.all(/((\.jpg)|(\.png)|(\.gif)|(\.jpeg))$/i,static('./',{
         maxAge:options.image*86400*1000
     }));
     router.all(/((\.js)|(\.jsx))$/i,static('./',{

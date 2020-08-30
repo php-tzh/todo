@@ -68,7 +68,8 @@ const defaultPlugins = [
             app:path.join(__dirname,'../client/client-entry.js'),
         },
         output:{
-            filename : '[name].[chunkhash:8].js'
+            filename : '[name].[chunkhash:8].js',
+            publicPath:'/public/'
         },
         module:{
             rules:[
@@ -88,11 +89,11 @@ const defaultPlugins = [
                 }
             ]
         },
-        plugins:[
+       plugins:defaultPlugins.concat([
             new MiniCssExtractPlugin({
                 filename:'main.css'//生成的样式文件名称
             })
-        ],
+        ]),
         optimization:{
             splitChunks:{
                 //分隔代码块
