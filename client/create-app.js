@@ -10,7 +10,6 @@ import createRouter from './config/router.js'
 
 import './assets/styles/global.styl'
 
-//
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Meta)//处理页面元信息

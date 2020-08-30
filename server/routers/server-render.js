@@ -4,11 +4,14 @@ module.exports = async (ctx,renderer,template)=>{
     const context = {url:ctx.path}
     
     try{
+        
         const appString = await renderer.renderToString(context)
+        const {title} = context.meta.inject()//title元信息
         const html = ejs.render(template,{
             appString,
             style:context.renderStyles(),
-            scripts:context.renderScripts()
+            scripts:context.renderScripts(),
+            title:title.text()
         })
         ctx.body = html
 

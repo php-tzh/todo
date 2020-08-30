@@ -19,6 +19,9 @@ let id = 1
 import Item from './item.vue'
 import Tabs from './tabs.vue'
 export default {
+  metaInfo:{
+    title:"这是tudo"
+  },
   data(){
     return  {
       todos:[],
