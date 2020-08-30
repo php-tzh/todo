@@ -42,7 +42,9 @@ const defaultPlugins = [
          },
          devServer,
          plugins:defaultPlugins.concat([
-            new HTMLPlugin()
+            new HTMLPlugin({
+                template:path.join(__dirname,'template.html')
+            })
          ])
 
      })
@@ -77,7 +79,9 @@ const defaultPlugins = [
             new MiniCssExtractPlugin({
                 filename:'main.css'//生成的样式文件名称
             }),
-            new HTMLPlugin()
+            new HTMLPlugin({
+                template:path.join(__dirname,'template.html')
+            })
         ],
         optimization:{
             splitChunks:{
