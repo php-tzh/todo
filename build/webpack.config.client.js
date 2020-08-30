@@ -63,7 +63,7 @@ const defaultPlugins = [
         module:{
             rules:[
                 {
-                    test:/\.(styl|stylus)$/,
+                    test:/\.styl/,
                     use:[
                         MiniCssExtractPlugin.loader,
                         'css-loader',
