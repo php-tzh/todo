@@ -1,0 +1,17 @@
+// {
+//     "presets":[
+//         "env"
+//     ],
+//     "plugins":[
+//         "transform-vue-jsx"
+//     ]
+// }
+{
+
+    "presets": ["@babel/preset-env"],
+    
+    "plugins": ["@babel/transform-runtime","transform-vue-jsx"]
+    
+    }
+    
+    
