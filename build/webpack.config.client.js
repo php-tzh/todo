@@ -1,7 +1,8 @@
 const path = require('path')
 const HTMLPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const VueClientPlugin = require('vue-server-renderer/client-plugin')
 let { merge }= require('webpack-merge')
 let baseConfig = require('./webpack.config.base')
 
@@ -19,8 +20,18 @@ let baseConfig = require('./webpack.config.base')
     hot:true
 }
 const defaultPlugins = [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
+   
+    new webpack.DefinePlugin({
+        'process.env':{
+            NODE_ENV:isDev?'"development"':'"production"'
+        }
+    }),
+    new HTMLPlugin({
+        template:path.join(__dirname,'template.html')
+    }),
+    new VueClientPlugin()
+
+
 ]
  if(isDev){
      config = merge(baseConfig,{
@@ -45,9 +56,8 @@ const defaultPlugins = [
          },
          devServer,
          plugins:defaultPlugins.concat([
-            new HTMLPlugin({
-                template:path.join(__dirname,'template.html')
-            })
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(),
          ])
 
      })
@@ -81,9 +91,6 @@ const defaultPlugins = [
         plugins:[
             new MiniCssExtractPlugin({
                 filename:'main.css'//生成的样式文件名称
-            }),
-            new HTMLPlugin({
-                template:path.join(__dirname,'template.html')
             })
         ],
         optimization:{
