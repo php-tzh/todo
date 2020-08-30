@@ -39,8 +39,6 @@ config = merge(baseConfig, {
         }
     ]
   },
-  // import Vue from 'vue'
- 
   plugins: [
     new MiniCssExtractPlugin({
         filename:'main.css'//生成的样式文件名称
