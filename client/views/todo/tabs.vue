@@ -18,7 +18,8 @@ export default {
     props:{
         filter:{
             type:String,
-            required:true
+            required:true,
+            default:'all'
         },todos:{
             type:Array
         }

@@ -1,5 +1,12 @@
 <template>
   <section class="real-app">
+    
+    <div class="tab-container">
+      <tabs :value="filter" @change="handleChangeTab">
+        <tab :label="tab" :index="tab" v-for="tab in states" :key="tab" />
+    
+      </tabs>
+    </div>
     <input
       type="text"
       class="add-input"
@@ -7,51 +14,86 @@
       placeholder="接下去要做什么？"
       @keyup.enter="handleAdd"
     >
-    <Item @del="deleteTodo" :todo="todo" v-for="todo in filteredTodos" :key="todo.id" ></Item>
-    <Tabs :filter="filter" :todos="todos" @toggle="toggleFilter" @clearAll="clearAllCompleted"></Tabs>
-   
-
+    <Helper @del="deleteTodo" @toggle="toggleState" :todo="todo" v-for="todo in filteredTodos" :key="todo.id" ></Helper>
+    <!-- <Tabs :filter="filter" :todos="todos" @toggle="toggleFilter" @clearAll="clearAllCompleted"></Tabs> -->
   </section>
 </template>
 
 <script>
-let id = 1
-import Item from './item.vue'
-import Tabs from './tabs.vue'
+import {mapState,mapActions} from 'vuex'
+import Helper from './item.vue'
+// import Tabs from './tabs.vue'
 export default {
   metaInfo:{
     title:"这是tudo"
   },
   data(){
     return  {
-      todos:[],
-      filter:'all'
-    }
+      filter:'all',
+      // tabValue:'all',
+      inputvalue:0,
+      states:['all','active','completed']
+    }   
   },
   components:{
-    Item,Tabs
+    Helper
+  },
+  mounted(){
+    //服务端客户公用数据，如果服务端获取到数据后，客户端不在请求
+    if(this.todos && this.todos.length<1){
+       this.fetchTodos()
+    }
+   
+  },
+  //服务端渲染获取数据
+  asyncData({store}){
+    return store.dispatch('fetchTodos')
+    // return Promise.resolve('hello')
+    // if(store.state.user){
+    // return store.dispatch('fetchTodos')
+
+    // }
+    // router.replace('/login')
+    // return Promise.revolve()
+
   },
   methods:{
+    ...mapActions(['fetchTodos','addTodo','deleteTodo','updateTodo','deleteAllCompleted']),
     handleAdd(e){
-        this.todos.unshift({
-          id:id++,
-          content:e.target.value.trim(),
+        const content = e.target.value.trim()
+        if(!content){
+          return this.$notify({
+            content:'必须输入'
+          })
+        }
+        const todo = {
+          content,
           completed:false
-        })
+        }
+        this.addTodo(todo)
         e.target.value=''
     },
-    deleteTodo(id){
-      this.todos.splice(this.todos.findIndex(todo=>todo.id===id))
 
-    },
-    toggleFilter(state){
-      this.filter = state
-    },
+   
     clearAllCompleted(){
-      this.todos = this.todos.filter(todo=>!todo.completed)
+      // this.todos = this.todos.filter(todo=>!todo.completed)
+      this.deleteAllCompleted()
+    },
+    handleChangeTab(value){
+      // this.tabValue = index
+      this.filter = value
+    },
+    toggleState(todo){
+      this.updateTodo({
+        id:todo.id,
+        todo:Object.assign({},todo,{
+          completed:!todo.completed
+        })
+      })
     }
   },
   computed:{
+    ...mapState(['todos']),
     filteredTodos(){
       if(this.filter=='all'){
         return this.todos

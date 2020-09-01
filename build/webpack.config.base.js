@@ -34,7 +34,7 @@ let config = {
                     }
                 ]
             },{
-                test:/\.jsx/,
+                test:/\.jsx$/,
                 loader:'babel-loader'
             },{
                 test:/\.js$/,

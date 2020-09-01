@@ -14,9 +14,15 @@ let baseConfig = require('./webpack.config.base')
     overlay:{
         errors:true
     },
+    headers: { 'Access-Control-Allow-Origin': '*' },
     historyApiFallback:{
         index:'/public/index.html'
     },
+    //前端请求配置代理到服务端地址
+    proxy: {
+        '/api': 'http://127.0.0.1:8081',
+        '/user': 'http://127.0.0.1:8081'
+      },
     hot:true
 }
 const defaultPlugins = [
@@ -113,4 +119,9 @@ const defaultPlugins = [
     })
 }
 
+config.resolve = {
+    alias: {
+      'model': path.join(__dirname, '../client/model/client-model.js')
+    }
+  }
 module.exports = config

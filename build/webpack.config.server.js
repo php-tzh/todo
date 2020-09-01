@@ -48,9 +48,16 @@ config = merge(baseConfig, {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       'process.env.VUE_ENV': '"server"'
     }),
+    //这里我们使renderer  如果使用bundlerender请把这个注释打开
     new VueServerPlugin()///该配置打包不会输出js文件而是一个json文件，通过这个json文件做一些服务端渲染的操作
 
   ]
 })
+config.resolve = {
+  alias: {
+    'model': path.join(__dirname, '../client/model/server-model.js')
+  }
+}
+
 
 module.exports = config

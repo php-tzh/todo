@@ -7,13 +7,15 @@ import App from './app.vue'
 import Meta from 'vue-meta'
 import createStore from './store/store'
 import createRouter from './config/router.js'
-
+import Notification from './components/notification'
+import Tabs from './components/tabs/index'
 import './assets/styles/global.styl'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
 Vue.use(Meta)//处理页面元信息
-
+Vue.use(Notification)
+Vue.use(Tabs)
 //每一次创建新的属性
 export default ()=>{
     const router =  createRouter()

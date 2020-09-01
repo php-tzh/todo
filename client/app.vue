@@ -1,20 +1,28 @@
 <template>
   <div id="app">
     <div id="cover"></div>
- 
+     <div id='loading'  v-show="loading" >
+       <loading />
+     </div>
     <Header></Header>
-    <router-view></router-view>
-    <!-- <Todo></Todo> -->
+    <!-- <notification content="test notify"></notification> -->
+    <!--先出后进 先出去的组件出去后，要进入的组件在进入-->
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
+    
+    <button @click="notify">通知</button>
+
     <Footer></Footer>
   </div>
 </template>
 
 <script>
-
+import {mapState} from 'vuex'
 import Header from './layout/header.vue'
 import Footer from './layout/footer.jsx'
 // import Todo from './views/todo/todo.vue'
-
+import Loading from './components/loading/loading.vue'
 export default {
   metaInfo:{
     title:'todoApp'
@@ -22,7 +30,25 @@ export default {
   components:{
     Header,
     Footer,
+    Loading
     // Todo
+  },
+  mounted(){
+    this.$notify({
+      content:'test helo',
+      btn:'close'
+    })
+  },
+  methods:{
+      notify(){
+        this.$notify({
+          content:'测试',
+          btn:'colse'
+        })
+      }
+  },
+  computed:{
+    ...mapState(['loading'])
   }
 
 }

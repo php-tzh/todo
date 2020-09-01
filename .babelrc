@@ -1,17 +1,42 @@
-// {
-//     "presets":[
-//         "env"
-//     ],
-//     "plugins":[
-//         "transform-vue-jsx"
-//     ]
-// }
 {
 
-    "presets": ["@babel/preset-env"],
+    "presets": [
+      
+        // "stage-0"
+  
+    ],
     
-    "plugins": ["@babel/transform-runtime","transform-vue-jsx"]
+    "plugins": [
+        "@babel/transform-runtime",
+        "transform-vue-jsx",
+        "syntax-dynamic-import"
+    ],
+    "env": {
+        "browser": {
+          "presets": [
+            [
+                "@babel/preset-env", {
+                "targets": {
+                  "browsers": ["last 2 versions", "safari >= 7"]
+                }
+              }
+            ]
+          ]
+        },
+        "node": {
+          "presets": [
+            [
+                "@babel/preset-env", {
+                "targets": {
+                  "node": "current"
+                }
+              }
+            ]
+          ]
+        }
+      }
     
-    }
+}
     
+
     

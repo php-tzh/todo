@@ -15,8 +15,27 @@ export default context => {
       if (!matchedComponents.length) {
         return reject(new Error('no component matched'))
       }
-      context.meta = app.$meta()//服务端渲染方式使用元信息
+      //服务端渲染方式获取数据
+      Promise.all(matchedComponents.map(Component=>{
+        if(Component.asyncData){
+          return Component.asyncData({
+            route:router.currentRoute,
+            router,
+            store
+          })
+        }
+      })).then(data=>{
+        //指定state 已便模板使用
+        context.state = store.state
+        // console.log(data);
+        context.router = router
+        context.meta = app.$meta()//服务端渲染方式使用元信息
         resolve(app)
+
+      }).catch(err=>{
+        console.log(err);
+      })
+     
     })
   })
 }
